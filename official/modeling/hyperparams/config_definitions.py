@@ -160,6 +160,7 @@ class CallbacksConfig(base_config.Config):
   enable_checkpoint_and_export: bool = True
   enable_tensorboard: bool = True
   enable_time_history: bool = True
+  backup_dir: str = None
 
 
 @dataclasses.dataclass

@@ -371,7 +371,8 @@ def train_and_eval(
         initial_step=initial_epoch * train_steps,
         batch_size=train_builder.global_batch_size,
         log_steps=params.train.time_history.log_steps,
-        model_dir=params.model_dir)
+        model_dir=params.model_dir,
+        backup_dir=params.train.callbacks.backup_dir)
 
   serialize_config(params=params, model_dir=params.model_dir)
 

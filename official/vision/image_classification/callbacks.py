@@ -37,7 +37,8 @@ def get_callbacks(model_checkpoint: bool = True,
                   initial_step: int = 0,
                   batch_size: int = 0,
                   log_steps: int = 0,
-                  model_dir: str = None) -> List[tf.keras.callbacks.Callback]:
+                  model_dir: str = None,
+                  backup_dir: str = None) -> List[tf.keras.callbacks.Callback]:
   """Get all callbacks."""
   model_dir = model_dir or ''
   callbacks = []
@@ -69,6 +70,9 @@ def get_callbacks(model_checkpoint: bool = True,
         save_weights_only=True,
         verbose=1))
     callbacks.append(MovingAverageCallback())
+  if(backup_dir is None):
+      raise ValueError("Backup dir not specified")
+  callbacks.append(CustomBackupAndRestore(backup_dir))
   return callbacks
 
 
@@ -80,6 +84,18 @@ def get_scalar_from_tensor(t: tf.Tensor) -> int:
   else:
     return t
 
+
+class CustomBackupAndRestore(tf.keras.callbacks.experimental.BackupAndRestore):
+  """Overwrite the delete backup"""
+  def on_train_end(self, logs=None):
+    # pylint: disable=protected-access
+    # On exit of training, delete the training state backup file that was saved
+    # for the purpose of worker recovery.
+    try:
+      self._training_state.delete_backup()
+    except Exception as e:
+      print(e)
+      
 
 class CustomTensorBoard(tf.keras.callbacks.TensorBoard):
   """A customized TensorBoard callback that tracks additional datapoints.
