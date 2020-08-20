@@ -46,7 +46,7 @@ model:
     label_smoothing: 0.1
 train:
   resume_checkpoint: False
-  epochs: 90
+  epochs: 45
   steps: 1
   callbacks:
     enable_checkpoint_and_export: False
