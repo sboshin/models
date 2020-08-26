@@ -98,9 +98,13 @@ class TimeHistory(tf.keras.callbacks.Callback):
   def get_startup_time(self, start_time_sec):
     return self.timestamp_log[0].timestamp - start_time_sec
 
+  def on_train_begin(self, logs=None):
+    logging.info(f"Training begins at {time.time()}")
+
   def on_train_end(self, logs=None):
     self.train_finish_time = time.time()
 
+    logging.info(f"Finished Training, total elapsed time is {time.time() - self.start_time}")
     if self.summary_writer:
       self.summary_writer.flush()
 

@@ -3,8 +3,8 @@
 # Note: This configuration uses a scaled per-replica batch size based on the number of devices.
 runtime:
   distribution_strategy: 'multi_worker_mirrored'
-  num_gpus: 4
   batchnorm_spatial_persistent: True
+  enable_xla: True
 train_dataset:
   name: 'imagenet2012'
   data_dir: null
