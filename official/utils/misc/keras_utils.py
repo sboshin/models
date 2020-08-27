@@ -59,6 +59,7 @@ class TimeHistory(tf.keras.callbacks.Callback):
     self.steps_before_epoch = initial_step
     self.steps_in_epoch = 0
     self.start_time = None
+    self.train_start_time = None
 
     if logdir:
       self.summary_writer = tf.summary.create_file_writer(logdir)
@@ -100,11 +101,12 @@ class TimeHistory(tf.keras.callbacks.Callback):
 
   def on_train_begin(self, logs=None):
     logging.info(f"Training begins at {time.time()}")
+    self.train_start_time = time.time()
 
   def on_train_end(self, logs=None):
     self.train_finish_time = time.time()
 
-    logging.info(f"Finished Training, total elapsed time is {time.time() - self.start_time}")
+    logging.info(f"Finished Training, total elapsed time is {time.time() - self.train_start_time}")
     if self.summary_writer:
       self.summary_writer.flush()
 
