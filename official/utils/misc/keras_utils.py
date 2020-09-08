@@ -100,18 +100,19 @@ class TimeHistory(tf.keras.callbacks.Callback):
     return self.timestamp_log[0].timestamp - start_time_sec
 
   def on_train_begin(self, logs=None):
-    logging.info(f"Training begins at {time.time()}")
     self.train_start_time = time.time()
+    logging.info(f"Training begins at {self.train_start_time}")
 
   def on_train_end(self, logs=None):
     self.train_finish_time = time.time()
 
-    logging.info(f"Finished Training, total elapsed time is {time.time() - self.train_start_time}")
+    logging.info(f"Finished Training at {self.train_finish_time} , total elapsed time is {self.train_finish_time - self.train_start_time}")
     if self.summary_writer:
       self.summary_writer.flush()
 
   def on_epoch_begin(self, epoch, logs=None):
     self.epoch_start = time.time()
+    logging.info(f"Epoch {epoch} begins at {self.epoch_start}")
 
   def on_batch_begin(self, batch, logs=None):
     if not self.start_time:
@@ -154,6 +155,8 @@ class TimeHistory(tf.keras.callbacks.Callback):
 
     self.steps_before_epoch += self.steps_in_epoch
     self.steps_in_epoch = 0
+
+    logging.info(f"Epoch {epoch} ends at {time.time()}, duration of {epoch_run_time}")
 
 
 class SimpleCheckpoint(tf.keras.callbacks.Callback):
