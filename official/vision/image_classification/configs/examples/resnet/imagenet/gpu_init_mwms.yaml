@@ -46,8 +46,7 @@ model:
     label_smoothing: 0.1
 train:
   resume_checkpoint: False
-  epochs: 2
-  steps: 3
+  epochs: 45
   callbacks:
     enable_checkpoint_and_export: False
     backup_dir: "s3://sam-debug-binaries/elastic/backup"
