@@ -95,6 +95,21 @@ class CustomBackupAndRestore(tf.keras.callbacks.experimental.BackupAndRestore):
       self._training_state.delete_backup()
     except Exception as e:
       print(e)
+
+  def on_epoch_end(self, epoch, logs=None):
+    # Back up the model and current epoch for possible future recovery.
+    #try multiple times
+    for ii in range(5):
+      try:
+        self._training_state.back_up(epoch)
+        break
+      except Exception as e:
+        print(e)
+        time.sleep(5)
+        if (ii < 4):
+          continue
+        else:
+          raise e
       
 
 class CustomTensorBoard(tf.keras.callbacks.TensorBoard):
