@@ -277,6 +277,10 @@ def define_classifier_flags():
       'log_steps',
       default=100,
       help='The interval of steps between logging of batch level stats.')
+  flags.DEFINE_integer(
+      'seed',
+      default=0,
+      help='Set tf global seed')
 
 
 def serialize_config(params: base_configs.ExperimentConfig,
@@ -433,6 +437,9 @@ def run(flags_obj: flags.FlagValues,
   Returns:
     Dictionary of training/eval stats
   """
+  #Set global flat
+  logging.info(f"Setting seed to {flags_obj.seed}")
+  tf.random.set_seed(flags_obj.seed)
   params = _get_params_from_flags(flags_obj)
   if params.mode == 'train_and_eval':
     return train_and_eval(params, strategy_override)
